@@ -12,6 +12,14 @@ angular.module('bilgic', [
             templateUrl: 'components/games/games.html',
             controller: 'GamesController'
         })
+        .when('/games/add', {
+            templateUrl: 'components/games/addEditGame.html',
+            controller: 'GameEditController'
+        })
+        .when('/games/edit/:id', {
+            templateUrl: 'components/games/addEditGame.html',
+            controller: 'GamesEditController'
+        })
         .when('/play/:id', {
             templateUrl: 'components/play/play.html',
             controller: 'PlayController'
