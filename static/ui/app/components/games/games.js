@@ -6,4 +6,7 @@ angular.module('bilgic.games', [])
             .then(function (data) {
                 $scope.games = data.data;
             });
+    })
+    .controller('GameEditController', function ($scope, $location, GameService) {
+        // get or create games
     });
