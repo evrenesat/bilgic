@@ -1,0 +1,73 @@
+{
+  "_id": "56c88f374794420e178cd602",
+  "picture": "http://placekitten.com/150/150",
+  "tags": [
+    "ullamco"
+  ],
+  "pictures": [
+    {
+      "picture": "game_images/kitten.jpg",
+      "pic_id": "01e77708-76cd-4a7e-a0ba-c99165e5884e"
+    },
+    {
+      "picture": "game_images/kitten.jpg",
+      "pic_id": "2ec5f9ee-15c9-4eac-aeb1-3cb31011686c"
+    },
+    {
+      "picture": "game_images/kitten.jpg",
+      "pic_id": "9d2ade39-2bb9-452d-a685-304ce0a715a9"
+    },
+    {
+      "picture": "game_images/kitten.jpg",
+      "pic_id": "13b03064-2b93-4089-832d-d6944c87cb54"
+    },
+    {
+      "picture": "game_images/kitten.jpg",
+      "pic_id": "1d66b992-2b13-4079-87c1-35574eb5b21d"
+    },
+    {
+      "picture": "game_images/kitten.jpg",
+      "pic_id": "295652ea-9012-4875-a05e-dad049ac73fa"
+    },
+    {
+      "picture": "game_images/kitten.jpg",
+      "pic_id": "33df3469-8e28-4531-a68b-895dea879f49"
+    },
+    {
+      "picture": "game_images/kitten.jpg",
+      "pic_id": "a9e3666c-e1d9-48cb-a0c0-15e4c8526d89"
+    },
+    {
+      "picture": "game_images/kitten.jpg",
+      "pic_id": "af3922a5-4668-4a78-b314-daca20cb3b2d"
+    },
+    {
+      "picture": "game_images/kitten.jpg",
+      "pic_id": "9d76e3ba-52b8-462f-b78d-ecb9c07011fc"
+    },
+    {
+      "picture": "game_images/kitten.jpg",
+      "pic_id": "8a160fd5-ab98-4e5b-9f38-b4f57ef46e3a"
+    },
+    {
+      "picture": "game_images/kitten.jpg",
+      "pic_id": "ced8d9e0-319b-4bb9-ad03-436aa2b0e7a6"
+    },
+    {
+      "picture": "game_images/kitten.jpg",
+      "pic_id": "15ac19ba-b051-4eef-99b5-3c39d5633151"
+    },
+    {
+      "picture": "game_images/kitten.jpg",
+      "pic_id": "4c6dea66-30ea-4a6a-b6ce-b6e98ba16db9"
+    },
+    {
+      "picture": "game_images/kitten.jpg",
+      "pic_id": "b0631356-d82e-4c0f-b2ce-b472838abcb8"
+    },
+    {
+      "picture": "game_images/kitten.jpg",
+      "pic_id": "e936f668-7e1b-453d-8d3f-7a0d9cd411b4"
+    }
+  ]
+}
