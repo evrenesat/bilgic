@@ -74,7 +74,7 @@ angular.module('bilgic')
                 point = new Phaser.Point(30, 30);
 
                 anchor = [0, 0];
-                gameContent.elements = shuffle(gameContent.elements);
+                gameContent.elements = shuffle(gameContent.elements).concat(shuffle(gameContent.elements));
                 angular.forEach(gameContent.elements, function (value, key) {
                     var img = game.add.sprite(point.x, point.y, value.key);
                     img.anchor.setTo(anchor[0], anchor[1]);
@@ -96,7 +96,7 @@ angular.module('bilgic')
 
             function calcAnchor(anchor, matrix) {
                 // matrix need to be like 4x4 or 5x5
-                var mtrx = ((matrix || '2x5').split('x')).map(function (x) {
+                var mtrx = ((matrix || '4x5').split('x')).map(function (x) {
                     return 1.3 * (-(Number(x)) + 1); // need to be index
                 });
                 var newAnchor = anchor;
