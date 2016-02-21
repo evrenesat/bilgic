@@ -7,7 +7,7 @@
 from __future__ import print_function, absolute_import
 
 from pycnic.errors import HTTP_401
-from pyoko import Model, ListNode, field
+from pyoko import Model, ListNode, field, LinkProxy
 from pyoko.fields import BaseField
 from pyoko.lib.utils import get_object_from_path
 from bilgic.lib.cache import SettingsCache
@@ -26,6 +26,7 @@ class User(Model):
     email = field.String(index=True)
     question = field.String(index=True)
     answer = field.String(index=True)
+    super = field.Boolean(index=True)
     password = field.String(index=True)
 
     def pre_save(self):
@@ -83,8 +84,18 @@ class Provider(Model):
         return cls._api
 
 
+class Category(Model):
+    name = field.String(index=True)
+    image = field.Text()
+    tags = field.String(index=True)
+    code_name = field.String(index=True)
+    parent = LinkProxy('Category')
+
+
 class Game(Model):
     name = field.String(index=True)
+    code_name = field.String(index=True)
+    logic_data = JSONField()
     active = field.Boolean(index=True)
 
 
@@ -99,17 +110,24 @@ class Element(Model):
 
 
 class Level(Model):
-    name = field.String()
+    RATING = ((10, 'Baby'), (20, 'Toddler'), (25, 'Pre-School'), (30, 'Child'),  (50, 'Adult'))
     game = Game()
     creator = User()
+    category = Category()
+    name = field.String()
+    tags = field.String(index=True)
+    logic_data = JSONField()
+    rating = field.Integer(choices=RATING, default=10)
 
-    class Pairs(ListNode):
-        elm1 = Element()
-        elm2 = Element()
+    class Elements(ListNode):
+        element = Element()
 
-    def get_pairs(self):
-        return [(pair.elm1.clean_data(),
-                 pair.elm2.clean_data())
-                for pair in self.Pairs]
-
-
+    # def get_pairs(self):
+    #     return [(pair.elm1.clean_data(),
+    #              pair.elm2.clean_data())
+    #             for pair in self.Pairs]
+    #
+    # def set_pairs(self, elements):
+    #     for element in elements:
+    #         elm = Element(**element).save()
+    #         self.Elements(element=elm)

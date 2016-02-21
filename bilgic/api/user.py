@@ -29,7 +29,7 @@ class Login(Handler):
         # Create a new session
         sess = get_session(self)
         user_data = user.clean_value()
-        sess.set(user=user_data)
+        sess.set(user=user_data, user_id=user.key)
         return {"message": "logged_in", "user": user_data, "status": "success"}
 
 
@@ -62,7 +62,7 @@ class Register(Handler):
                         answer=answer, question=question).save()
             sess = get_session(self)
             user_data = user.clean_value()
-            sess.set(user=user_data)
+            sess.set(user=user_data, user_id=user.key)
             return {"message": "register_success", "user": user_data, "status": "success"}
         return {"message": error, "status": "error"}
 
