@@ -7,7 +7,7 @@ from bilgic.providers.base import BaseProvider
 
 
 class PexelsProvider(BaseProvider):
-    PER_PAGE = 30
+    
     BASE_URL = "http://api.pexels.com/v1/"
     SEARCH_URL = "{url}search?query={query}&per_page={per_page}"
 

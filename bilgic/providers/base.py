@@ -9,6 +9,8 @@ from bilgic.lib.cache import ImageContentCache, ImageSearchCache
 
 
 class BaseProvider(object):
+    PER_PAGE = 100
+
     def get_base64_image(self, url):
         image_cache = ImageContentCache(url.encode('base64'))
         return image_cache.get() or image_cache.set(base64.b64encode(requests.get(url).content))
