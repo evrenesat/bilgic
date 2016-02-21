@@ -13,7 +13,7 @@ from bilgic.models import *
 
 
 class Api(Handler):
-    """ Clears a user's session """
+    """ super primitive API documentation """
 
     def get(self):
         from bilgic.api import app
@@ -22,7 +22,7 @@ class Api(Handler):
 
 
 def get_user(handler):
-    """ Lookup a user session or return None if one doesn't exist """
+    """ Lookup a user in session or return None if one doesn't exist """
 
     sess = get_session(handler)
     if not sess:
