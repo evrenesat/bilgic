@@ -3,3 +3,4 @@ pycnic
 six
 requests
 passlib
+redis
