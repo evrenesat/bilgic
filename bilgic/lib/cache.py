@@ -61,6 +61,7 @@ class Cache(object):
     """
     PREFIX = 'DFT'
     SERIALIZE = True
+    DEFAULT = None
 
 
 
@@ -85,7 +86,7 @@ class Cache(object):
         d = cache.get(self.key)
         return ((json.loads(d.decode('utf-8')) if self.serialize else d)
                 if d is not None
-                else default)
+                else (default or self.DEFAULT))
 
     def set(self, val, lifetime=None):
         """
@@ -233,7 +234,7 @@ class SettingsCache(Cache):
         super(SettingsCache, self).__init__(name)
 
 
-class SessionCache(Cache):
+class Session(Cache):
     """
     Cache object for user sessions.
 
@@ -241,9 +242,18 @@ class SessionCache(Cache):
         sessid: user session id.
     """
     PREFIX = 'SES'
+    DEFAULT = {}
+
+    def get(self, key, default=None):
+        return super(Session, self).get().get(key, default)
+
+    def set(self, **kwargs):
+        val = super(Session, self).get()
+        val.update(kwargs)
+        super(Session, self).set(val)
 
     def __init__(self, sessid):
-        super(SessionCache, self).__init__(sessid)
+        super(Session, self).__init__(sessid)
 
 class ClearCache(Cache):
     """

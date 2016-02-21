@@ -5,6 +5,8 @@
 # Copyright (C) 2015 Evren Esat Ozkan.
 
 from __future__ import print_function, absolute_import
+
+from pycnic.errors import HTTP_401
 from pyoko import Model, ListNode, field
 from pyoko.fields import BaseField
 from pyoko.lib.utils import get_object_from_path
@@ -16,10 +18,6 @@ CurrentProviderData = SettingsCache('current_provider_data')
 
 class JSONField(BaseField):
     solr_type = 'string'
-
-
-class Unauthorized(Exception):
-    pass
 
 
 class User(Model):
@@ -36,7 +34,7 @@ class User(Model):
     def check_password(self, clean_password):
         # check password hash against given clean password input
         if not pbkdf2_sha512.verify(self.password, clean_password):
-            raise Unauthorized()
+            raise HTTP_401("Invalid password")
 
 
 class Provider(Model):
@@ -77,6 +75,7 @@ class Provider(Model):
 
 class Game(Model):
     name = field.String()
+    active = field.Boolean()
 
 
 class Elements(Model):
