@@ -9,7 +9,7 @@ Base Cache object and some builtin subclasses of it.
 # (GPLv3).  See LICENSE.txt for details.
 import json
 
-from zengine.config import settings
+from pyoko.conf import settings
 from redis import Redis
 
 redis_host, redis_port = settings.REDIS_SERVER.split(':')
@@ -194,6 +194,19 @@ class Cache(object):
 
 
 
+class ImageContentCache(Cache):
+    """
+    Cache object for the image searchs.
+
+    Args:
+        key: keyword
+    """
+    PREFIX = 'IMC'
+    SERIALIZE = False
+
+    def __init__(self, id):
+        super(ImageContentCache, self).__init__(id)
+
 class ImageSearchCache(Cache):
     """
     Cache object for the image searchs.
@@ -206,17 +219,18 @@ class ImageSearchCache(Cache):
     def __init__(self, keyword):
         super(ImageSearchCache, self).__init__(keyword)
 
-class ProviderCache(Cache):
+class SettingsCache(Cache):
     """
     Cache object for the image searchs.
 
     Args:
         key: keyword
     """
-    PREFIX = 'PRV'
+    PREFIX = 'SETT'
+    SERIALIZE = False
 
     def __init__(self, name):
-        super(ProviderCache, self).__init__(name)
+        super(SettingsCache, self).__init__(name)
 
 
 class SessionCache(Cache):

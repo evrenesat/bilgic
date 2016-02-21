@@ -2,3 +2,4 @@ pyoko
 pycnic
 six
 requests
+passlib

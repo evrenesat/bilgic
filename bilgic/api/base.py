@@ -5,9 +5,8 @@ from __future__ import print_function, absolute_import
 from functools import wraps
 from pycnic.core import WSGI, Handler
 from pycnic.errors import HTTP_401, HTTP_400
-# Import our SQLAlchemy stuff
-from ..models import *
-
+from bilgic.lib.cache import SessionCache
+from bilgic.models import *
 
 
 def get_user(request):
@@ -16,13 +15,13 @@ def get_user(request):
     sess_id = request.cookies.get("session_id")
     if not sess_id:
         return None
-    sess = db.query(UserSession).filter(
-        UserSession.session_id == sess_id).first()
+    sess = SessionCache(sess_id).get()
     if not sess:
         return None
     if not sess.user:
         return None
-    return { "username": sess.user.username }
+    return {"username": sess.user.username}
+
 
 def requires_login():
     """ Wrapper for methods that require login """
@@ -33,8 +32,11 @@ def requires_login():
             if not get_user(args[0].request):
                 raise HTTP_401("I can't let you do that")
             return f(*args, **kwargs)
+
         return wrapped
+
     return wrapper
+
 
 class Home(Handler):
     """ Handler for a message with the user's name """
@@ -42,11 +44,12 @@ class Home(Handler):
     @requires_login()
     def get(self):
         user = get_user(self.request)
-        return { "message":"Hello, %s"%(user.get("username")) }
+        return {"message": "Hello, %s" % (user.get("username"))}
 
     @requires_login()
     def post(self):
         return self.get()
+
 
 class Login(Handler):
     """ Create a session for a user """
@@ -61,8 +64,8 @@ class Login(Handler):
 
         # See if a user exists with those params
         user = db.query(User).filter(
-            User.username==username,
-            User.password==password).first()
+            User.username == username,
+            User.password == password).first()
         if not user:
             raise HTTP_401("Invalid username or password")
 
@@ -71,7 +74,8 @@ class Login(Handler):
             user_id=user.id)
         db.add(sess)
         self.response.set_cookie("session_id", sess.session_id)
-        return { "message":"Logged in", "session_id":sess.session_id }
+        return {"message": "Logged in", "session_id": sess.session_id}
+
 
 class Logout(Handler):
     """ Clears a user's session """
@@ -82,12 +86,13 @@ class Logout(Handler):
         if sess_id:
             # query to user sessions table
             sess = db.query(UserSession).filter(
-                UserSession.session_id==sess_id).first()
+                UserSession.session_id == sess_id).first()
             if sess:
                 db.delete(sess)
             self.response.delete_cookie("session_id")
-            return { "message":"logged out" }
-        return { "message":"Not logged in" }
+            return {"message": "logged out"}
+        return {"message": "Not logged in"}
+
 
 class app(WSGI):
     routes = [
@@ -95,6 +100,7 @@ class app(WSGI):
         ('/login', Login()),
         ('/logout', Logout())
     ]
+
 
 if __name__ == "__main__":
 
@@ -107,10 +113,10 @@ if __name__ == "__main__":
     ])
 
     from wsgiref.simple_server import make_server
+
     try:
         print("Serving on 0.0.0.0:8080...")
         make_server('0.0.0.0', 8080, app).serve_forever()
     except KeyboardInterrupt:
         pass
     print("Done")
-
