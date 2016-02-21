@@ -228,7 +228,7 @@ class SettingsCache(Cache):
         key: keyword
     """
     PREFIX = 'SETT'
-    SERIALIZE = False
+    # SERIALIZE = False
 
     def __init__(self, name):
         super(SettingsCache, self).__init__(name)

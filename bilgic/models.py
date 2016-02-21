@@ -21,13 +21,19 @@ class JSONField(BaseField):
 
 
 class User(Model):
-    username = field.String("Username", index=True)
-    email = field.String("Email", index=True)
-    password = field.String("Password", index=True)
+    username = field.String(index=True)
+    name = field.String(index=True)
+    email = field.String(index=True)
+    question = field.String(index=True)
+    answer = field.String(index=True)
+    password = field.String(index=True)
 
     def pre_save(self):
         # this is pre-save hook
         # encrypt password if not already encrypted
+
+        if self.answer and not self.answer.startswith('pbkdf2'):
+            self.answer = pbkdf2_sha512.encrypt(self.answer)
         if not self.password.startswith('pbkdf2'):
             self.password = pbkdf2_sha512.encrypt(self.password)
 
@@ -65,20 +71,24 @@ class Provider(Model):
     @classmethod
     def get_provider_api(cls):
         if cls._api is None:
-            cp = CurrentProviderData.get()
-            if not cp:
-                cp = CurrentProviderData.set(cls.get_current_provider_dict())
-            cls._api = get_object_from_path("providers.%s.api" % cp['module_name'])
-            cls._api.set_credentials(**cp['credentials'])
+            try:
+                cp = CurrentProviderData.get()
+                if not cp:
+                    cp = CurrentProviderData.set(cls.get_current_provider_dict())
+                cls._api = get_object_from_path("bilgic.providers.%s.api" % cp['module_name'])
+                cls._api.set_credentials(**cp['credentials'])
+            except:
+                # print(cp)
+                raise
         return cls._api
 
 
 class Game(Model):
-    name = field.String()
-    active = field.Boolean()
+    name = field.String(index=True)
+    active = field.Boolean(index=True)
 
 
-class Elements(Model):
+class Element(Model):
     name = field.String(index=True)
     text = field.String(index=True)
     content = field.Text()
@@ -91,6 +101,15 @@ class Elements(Model):
 class Level(Model):
     name = field.String()
     game = Game()
+    creator = User()
 
-    class Elements(ListNode):
-        element = Elements()
+    class Pairs(ListNode):
+        elm1 = Element()
+        elm2 = Element()
+
+    def get_pairs(self):
+        return [(pair.elm1.clean_data(),
+                 pair.elm2.clean_data())
+                for pair in self.Pairs]
+
+
