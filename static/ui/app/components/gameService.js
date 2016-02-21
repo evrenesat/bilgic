@@ -67,7 +67,8 @@ angular.module('bilgic')
 
             function match(sprite, pointer) {
                 clickAudio.play();
-                if (first === sprite.key) {
+                if (first === sprite.key && firstSprite.position != sprite.position) {
+
                     masterCounter++;
                     winAudio.play();
                     firstSprite.destroy();
