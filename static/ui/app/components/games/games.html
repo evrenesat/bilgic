@@ -1,7 +1,16 @@
 <div class="container-fluid">
-    <div ng-repeat="game in games" style="width:20%; margin: 20px; float: left;">
-        <a ng-href="#/play/{{game._id}}">
-            <img ng-src="{{game.picture}}" alt="{{game.id}}" ng-click="play(game._id)" />
-        </a>
+    <div style="width:20%; height: 100%; margin: 20px; float: left; border-right: 1px dashed #65767F">
+        <ul>
+            <li ng-repeat="game in games">
+                <a role="button" ng-click="getlevels(game.key)">{{game.name}}</a>
+            </li>
+        </ul>
+    </div>
+    <div ng-show="gameLevels" style="width:20%; height: 100%; margin: 20px; float: left; border-right: 1px dashed #65767F">
+        <ul>
+            <li ng-repeat="level in gameLevels">
+                <a ng-href="#/play/{{level.key}}">{{level.name}}</a>
+            </li>
+        </ul>
     </div>
 </div>
