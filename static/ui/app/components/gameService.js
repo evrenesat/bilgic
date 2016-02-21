@@ -4,21 +4,18 @@ angular.module('bilgic')
     .service('BPhaser', function () {
         return window.Phaser;
     })
-    .factory('GameService', function ($http, $timeout, $location, BPhaser, Utilities) {
+    .factory('GameService', function ($http, $timeout, $location, BPhaser, Utilities, Preload) {
         var gameService = {};
         gameService.createGame = function (gameContent) {
             if(!gameContent) {return;}
 
-            var masterCounter = 0;
-            var totalSprites;
-            var point, anchor, first, second; // for matchings
+            var masterCounter = 0, totalSprites, point, anchor, first, second;
             var firstSprite, secondSprite;
             var isSecond = false;
             var clickAudio, winAudio;
             var text, grd, successText, exitText;
 
             // get game from localStorage or remote api
-
             var game = new BPhaser.Game("100%", "100%", BPhaser.AUTO, 'play-in', {
                 preload: preload,
                 create: create,
@@ -27,14 +24,7 @@ angular.module('bilgic')
             });
 
             function preload() {
-                game.load.audio('click', 'asset/button_push.mp3');
-                game.load.audio('win', 'asset/win.mp3');
-
-                // load images in preload
-                // add expression if content type is image
-                angular.forEach(gameContent.elements, function (value, key) {
-                    game.load.image(value.key, 'data:image/jpg;base64,'+value.content);
-                });
+                Preload.preload(game, gameContent);
             }
 
             function create() {

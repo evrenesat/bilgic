@@ -1,7 +1,7 @@
 /* app css stylesheet */
 @font-face {
     font-family: foo;
-    src: url('/asset/fonts/foo.ttf');
+    src: url('asset/fonts/foo.ttf');
 }
 
 body {
