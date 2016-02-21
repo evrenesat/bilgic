@@ -6,8 +6,19 @@ from __future__ import print_function, absolute_import
 import uuid
 from functools import wraps
 
+from pycnic.core import Handler
+
 from bilgic.lib.cache import Session
 from bilgic.models import *
+
+
+class Api(Handler):
+    """ Clears a user's session """
+
+    def get(self):
+        from bilgic.api import app
+        self.response.set_header("Content-Type", "text/plain")
+        return "API Docs\n\n   -  " + " \n   -  ".join(dict(app.routes).keys())
 
 
 def get_user(handler):
@@ -45,5 +56,3 @@ def requires_login():
         return wrapped
 
     return wrapper
-
-

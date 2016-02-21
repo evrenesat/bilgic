@@ -75,3 +75,5 @@ class Logout(Handler):
         sess.set('user', None)
         return {"message": "logged_out", "status": "success"}
 
+
+

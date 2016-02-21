@@ -1,9 +1,12 @@
 # -*-  coding: utf-8 -*-
 """
 """
-from pycnic.core import WSGI
+from pycnic.core import WSGI, Handler
+
+from bilgic.api.base import Api
 from bilgic.api.images import GetLevel, ListLevels, ListGames, SetLevel, SearchImages
 from bilgic.api.user import Login, Register, Logout
+
 
 
 class app(WSGI):
@@ -22,7 +25,8 @@ class app(WSGI):
         ('/games', ListGames()),
         ('/login', Login()),
         ('/logout', Logout()),
-        ('/register', Register())
+        ('/register', Register()),
+        ('/api', Api()),
     ]
 
 
