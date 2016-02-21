@@ -5,7 +5,9 @@
 # Copyright (C) 2015 Evren Esat Ozkan.
 
 from __future__ import print_function, absolute_import
-from pyoko import Model, ListNode, field
+
+from pycnic.errors import HTTP_401
+from pyoko import Model, ListNode, field, LinkProxy
 from pyoko.fields import BaseField
 from pyoko.lib.utils import get_object_from_path
 from bilgic.lib.cache import SettingsCache
@@ -18,25 +20,28 @@ class JSONField(BaseField):
     solr_type = 'string'
 
 
-class Unauthorized(Exception):
-    pass
-
-
 class User(Model):
-    username = field.String("Username", index=True)
-    email = field.String("Email", index=True)
-    password = field.String("Password", index=True)
+    username = field.String(index=True)
+    name = field.String(index=True)
+    email = field.String(index=True)
+    question = field.String(index=True)
+    answer = field.String(index=True)
+    super = field.Boolean(index=True)
+    password = field.String(index=True)
 
     def pre_save(self):
         # this is pre-save hook
         # encrypt password if not already encrypted
+
+        if self.answer and not self.answer.startswith('pbkdf2'):
+            self.answer = pbkdf2_sha512.encrypt(self.answer)
         if not self.password.startswith('pbkdf2'):
             self.password = pbkdf2_sha512.encrypt(self.password)
 
     def check_password(self, clean_password):
         # check password hash against given clean password input
         if not pbkdf2_sha512.verify(self.password, clean_password):
-            raise Unauthorized()
+            raise HTTP_401("Invalid password")
 
 
 class Provider(Model):
@@ -67,19 +72,34 @@ class Provider(Model):
     @classmethod
     def get_provider_api(cls):
         if cls._api is None:
-            cp = CurrentProviderData.get()
-            if not cp:
-                cp = CurrentProviderData.set(cls.get_current_provider_dict())
-            cls._api = get_object_from_path("providers.%s.api" % cp['module_name'])
-            cls._api.set_credentials(**cp['credentials'])
+            try:
+                cp = CurrentProviderData.get()
+                if not cp:
+                    cp = CurrentProviderData.set(cls.get_current_provider_dict())
+                cls._api = get_object_from_path("bilgic.providers.%s.api" % cp['module_name'])
+                cls._api.set_credentials(**cp['credentials'])
+            except:
+                # print(cp)
+                raise
         return cls._api
 
 
+class Category(Model):
+    name = field.String(index=True)
+    image = field.Text()
+    tags = field.String(index=True)
+    code_name = field.String(index=True)
+    parent = LinkProxy('Category')
+
+
 class Game(Model):
-    name = field.String()
+    name = field.String(index=True)
+    code_name = field.String(index=True)
+    logic_data = JSONField()
+    active = field.Boolean(index=True)
 
 
-class Elements(Model):
+class Element(Model):
     name = field.String(index=True)
     text = field.String(index=True)
     content = field.Text()
@@ -90,8 +110,24 @@ class Elements(Model):
 
 
 class Level(Model):
-    name = field.String()
+    RATING = ((10, 'Baby'), (20, 'Toddler'), (25, 'Pre-School'), (30, 'Child'),  (50, 'Adult'))
     game = Game()
+    creator = User()
+    category = Category()
+    name = field.String()
+    tags = field.String(index=True)
+    logic_data = JSONField()
+    rating = field.Integer(choices=RATING, default=10)
 
     class Elements(ListNode):
-        element = Elements()
+        element = Element()
+
+    # def get_pairs(self):
+    #     return [(pair.elm1.clean_data(),
+    #              pair.elm2.clean_data())
+    #             for pair in self.Pairs]
+    #
+    # def set_pairs(self, elements):
+    #     for element in elements:
+    #         elm = Element(**element).save()
+    #         self.Elements(element=elm)

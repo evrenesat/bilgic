@@ -2,25 +2,45 @@
 """
 """
 from __future__ import print_function, absolute_import
+
+import uuid
 from functools import wraps
-from pycnic.core import WSGI, Handler
-from pycnic.errors import HTTP_401, HTTP_400
-from bilgic.lib.cache import SessionCache
+
+from pycnic.core import Handler
+
+from bilgic.lib.cache import Session
 from bilgic.models import *
 
 
-def get_user(request):
+class Api(Handler):
+    """ Clears a user's session """
+
+    def get(self):
+        from bilgic.api import app
+        self.response.set_header("Content-Type", "text/plain")
+        return "API Docs\n\n   -  " + " \n   -  ".join(dict(app.routes).keys())
+
+
+def get_user(handler):
     """ Lookup a user session or return None if one doesn't exist """
 
-    sess_id = request.cookies.get("session_id")
-    if not sess_id:
-        return None
-    sess = SessionCache(sess_id).get()
+    sess = get_session(handler)
     if not sess:
         return None
-    if not sess.user:
+    user_dict = sess.get('user')
+    if not user_dict:
         return None
-    return {"username": sess.user.username}
+    user = User._load_data(user_dict)
+    user.key = sess.get("user_id")
+    return user
+
+
+def get_session(handler):
+    sess_id = handler.request.cookies.get("session_id")
+    if not sess_id:
+        sess_id = uuid.uuid4().hex
+        handler.response.cookies.set("session_id", sess_id)
+    return Session(sess_id)
 
 
 def requires_login():
@@ -29,94 +49,10 @@ def requires_login():
     def wrapper(f):
         @wraps(f)
         def wrapped(*args, **kwargs):
-            if not get_user(args[0].request):
+            if not get_user(args[0]):
                 raise HTTP_401("I can't let you do that")
             return f(*args, **kwargs)
 
         return wrapped
 
     return wrapper
-
-
-class Home(Handler):
-    """ Handler for a message with the user's name """
-
-    @requires_login()
-    def get(self):
-        user = get_user(self.request)
-        return {"message": "Hello, %s" % (user.get("username"))}
-
-    @requires_login()
-    def post(self):
-        return self.get()
-
-
-class Login(Handler):
-    """ Create a session for a user """
-
-    def post(self):
-
-        username = self.request.data.get("username")
-        password = self.request.data.get("password")
-
-        if not username or not password:
-            raise HTTP_400("Please specify username and password")
-
-        # See if a user exists with those params
-        user = db.query(User).filter(
-            User.username == username,
-            User.password == password).first()
-        if not user:
-            raise HTTP_401("Invalid username or password")
-
-        # Create a new session
-        sess = UserSession(
-            user_id=user.id)
-        db.add(sess)
-        self.response.set_cookie("session_id", sess.session_id)
-        return {"message": "Logged in", "session_id": sess.session_id}
-
-
-class Logout(Handler):
-    """ Clears a user's session """
-
-    def post(self):
-
-        sess_id = self.request.cookies.get("session_id")
-        if sess_id:
-            # query to user sessions table
-            sess = db.query(UserSession).filter(
-                UserSession.session_id == sess_id).first()
-            if sess:
-                db.delete(sess)
-            self.response.delete_cookie("session_id")
-            return {"message": "logged out"}
-        return {"message": "Not logged in"}
-
-
-class app(WSGI):
-    routes = [
-        ('/home', Home()),
-        ('/login', Login()),
-        ('/logout', Logout())
-    ]
-
-
-if __name__ == "__main__":
-
-    print("DB: Creating users table in memory...")
-    Base.metadata.create_all(engine)
-
-    print("DB: Adding users...")
-    db.add_all([
-        User(username="foo", password="foo")
-    ])
-
-    from wsgiref.simple_server import make_server
-
-    try:
-        print("Serving on 0.0.0.0:8080...")
-        make_server('0.0.0.0', 8080, app).serve_forever()
-    except KeyboardInterrupt:
-        pass
-    print("Done")
