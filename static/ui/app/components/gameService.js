@@ -4,35 +4,8 @@ angular.module('bilgic')
     .service('BPhaser', function () {
         return window.Phaser;
     })
-    .factory('GameService', function ($http, $timeout, $location, BPhaser, Settings) {
+    .factory('GameService', function ($http, $timeout, $location, BPhaser, Utilities) {
         var gameService = {};
-        gameService.games = [];
-        gameService.getGames = function () {
-            return $http.get(Settings.api_url + 'games')
-                .success(function (res) {
-                    return res.data;
-                });
-        };
-        gameService.getGameLevels = function (key) {
-            return $http.get(Settings.api_url + 'game_levels/' + key)
-                .success(function (res) {
-                    return res.data;
-                });
-        };
-        gameService.getGame = function (key, scope) {
-            if (localStorage.getItem("game_" + key)) {
-                scope.game = JSON.parse(localStorage.getItem("game_" + id));
-            } else {
-                $http.get(Settings.api_url + 'get_level/' + key)
-                    .success(function (res) {
-                        scope.game = res;
-                        localStorage.setItem("game_" + res.key, JSON.stringify(res));
-                    });
-            }
-        };
-        gameService.saveGames = function () {
-
-        };
         gameService.createGame = function (gameContent) {
             if(!gameContent) {return;}
 
@@ -54,7 +27,6 @@ angular.module('bilgic')
             });
 
             function preload() {
-                game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
                 game.load.audio('click', 'asset/button_push.mp3');
                 game.load.audio('win', 'asset/win.mp3');
 
@@ -74,7 +46,7 @@ angular.module('bilgic')
                 point = new Phaser.Point(30, 30);
 
                 anchor = [0, 0];
-                gameContent.elements = shuffle(gameContent.elements).concat(shuffle(gameContent.elements));
+                gameContent.elements = Utilities.shuffle(gameContent.elements).concat(Utilities.shuffle(gameContent.elements));
                 angular.forEach(gameContent.elements, function (value, key) {
                     var img = game.add.sprite(point.x, point.y, value.key);
                     img.anchor.setTo(anchor[0], anchor[1]);
@@ -82,7 +54,7 @@ angular.module('bilgic')
                     img.events.onInputDown.add(match, this);
                     img.scale.setTo(0.7, 0.7);
                     img.angle = parseInt((Math.random() < 0.5 ? 1 : -1) * (Math.random() * (5 - 1)));
-                    anchor = calcAnchor(anchor);
+                    anchor = Utilities.calcAnchor(anchor);
                 });
                 totalSprites = gameContent.elements.length;
 
@@ -92,32 +64,6 @@ angular.module('bilgic')
                 exitText.anchor.setTo(0, 0);
                 exitText.inputEnabled = true;
                 exitText.events.onInputDown.add(exitGame, this);
-            }
-
-            function calcAnchor(anchor, matrix) {
-                // matrix need to be like 4x4 or 5x5
-                var mtrx = ((matrix || '4x5').split('x')).map(function (x) {
-                    return 1.3 * (-(Number(x)) + 1); // need to be index
-                });
-                var newAnchor = anchor;
-
-                if (anchor[0] === mtrx[0]) {
-                    newAnchor[1] -= 1.3;
-                    newAnchor[0] = 1.3;
-                }
-                newAnchor[0] = anchor[0] - 1.3;
-                return newAnchor;
-            }
-
-            function shuffle(array) {
-                var m = array.length, t, i;
-                while (m) {
-                    i = Math.floor(Math.random() * m--);
-                    t = array[m];
-                    array[m] = array[i];
-                    array[i] = t;
-                }
-                return array;
             }
 
             function audioCB() {}

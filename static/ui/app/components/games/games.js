@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('bilgic.games', [])
-    .controller('GamesController', function ($scope, $location, GameService) {
-        GameService.getGames()
+    .controller('GamesController', function ($scope, $location, GameService, Client, Utilities) {
+        Client.getGames()
             .success(function (data) {
                 $scope.games = data.games;
             });
         $scope.getlevels = function (key) {
-            GameService.getGameLevels(key)
+            Client.getGameLevels(key)
                 .success(function (data) {
                     $scope.gameLevels = data.levels;
                 });
