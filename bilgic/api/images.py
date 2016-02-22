@@ -42,9 +42,10 @@ class GetLevel(Handler):
 
 class SetLevel(Handler):
     def post(self):
-        level = Level(**self.data["level"]).save()
-        for elm in self.data["elements"]:
-            level.Elements(element=Element(**elm))
+        level = Level(**self.request.data["level"]).save()
+        level.game = Game.objects.get(self.request.data["level"]['game'])
+        for elm in self.request.data["elements"]:
+            level.Elements(element=Element(**elm).save())
         user = get_user(self)
         if user:
             level.creator = user

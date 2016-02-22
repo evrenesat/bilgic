@@ -39,7 +39,7 @@ def get_session(handler):
     sess_id = handler.request.cookies.get("session_id")
     if not sess_id:
         sess_id = uuid.uuid4().hex
-        handler.response.cookies.set("session_id", sess_id)
+        handler.response.set_cookie("session_id", sess_id)
     return Session(sess_id)
 
 

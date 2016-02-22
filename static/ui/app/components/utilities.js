@@ -25,5 +25,8 @@ angular.module('bilgic')
         }
         return array;
     };
+    utilities.calcImageSize = function(){
+        Settings.default_matrix.split('x')
+    }
     return utilities;
 });

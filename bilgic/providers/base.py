@@ -13,7 +13,7 @@ class BaseProvider(object):
 
     def get_base64_image(self, url):
         image_cache = ImageContentCache(url.encode('base64'))
-        return image_cache.get() or image_cache.set(base64.b64encode(requests.get(url).content))
+        return image_cache.get() or image_cache.set("data:image/jpg;base64," + base64.b64encode(requests.get(url).content))
 
     def get_image_list(self, keyword):
         cache = ImageSearchCache(keyword)

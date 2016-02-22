@@ -16,7 +16,7 @@ angular.module('bilgic')
             var text, grd, successText, exitText;
 
             // get game from localStorage or remote api
-            var game = new BPhaser.Game("100%", "100%", BPhaser.AUTO, 'play-in', {
+            var game = new BPhaser.Game("100%", "100%", BPhaser.CANVAS, 'play-in', {
                 preload: preload,
                 create: create,
                 update: update,
@@ -28,32 +28,49 @@ angular.module('bilgic')
             }
 
             function create() {
-                game.stage.backgroundColor = '#26D6D0';
+                //game.stage.backgroundColor = '#26D6D0';
+                //game.stage.bac = '#26D6D0';
+                game.add.tileSprite(0, 0, window.innerWidth, window.innerHeight, 'bg2');
                 clickAudio = game.add.audio('click');
                 winAudio = game.add.audio('win');
                 game.sound.setDecodedCallback([clickAudio, winAudio], audioCB, this);
-
+                var blurX = game.add.filter('BlurX');
+                var blurY = game.add.filter('BlurY');
                 point = new Phaser.Point(30, 30);
 
                 anchor = [0, 0];
                 gameContent.elements = Utilities.shuffle(gameContent.elements).concat(Utilities.shuffle(gameContent.elements));
                 angular.forEach(gameContent.elements, function (value, key) {
+                    var shadow = game.add.sprite(point.x, point.y, value.key);
                     var img = game.add.sprite(point.x, point.y, value.key);
+                    img.shadow = shadow;
+                    shadow.anchor.setTo(anchor[0]-0.1, anchor[1]-0.1);
+                    shadow.tint = 0x000000;
+                    shadow.alpha = 0.3;
+                    shadow.width = 100;
+                    shadow.height = 100;
+
+                    shadow.filters = [blurX, blurY];
                     img.anchor.setTo(anchor[0], anchor[1]);
                     img.inputEnabled = true;
                     img.events.onInputDown.add(match, this);
-                    img.scale.setTo(0.7, 0.7);
-                    img.angle = parseInt((Math.random() < 0.5 ? 1 : -1) * (Math.random() * (5 - 1)));
+                    //img.scale.setTo(0.7, 0.7);
+                    img.width = 100;
+                    img.height = 100;
+                    var angle = parseInt((Math.random() < 0.5 ? 1 : -1) * (Math.random() * (5 - 1)));
+                    img.angle = angle;
+                    shadow.angle = angle;
                     anchor = Utilities.calcAnchor(anchor);
                 });
                 totalSprites = gameContent.elements.length;
 
                 successText = game.add.text(game.world.width-180, 15, "Skor: 0", {font: "50px foo", fill: "#FAF490"});
+                successText.alpha = 0.5;
                 successText.anchor.setTo(0, 0);
-                exitText = game.add.text(game.world.width-180, game.world.height-100, "Exit", {font: "50px foo", fill: "#FAF490"});
-                exitText.anchor.setTo(0, 0);
-                exitText.inputEnabled = true;
-                exitText.events.onInputDown.add(exitGame, this);
+                //exitText = game.add.text(game.world.width-180, game.world.height-100, "Exit", {font: "50px foo", fill: "#FAF490"});
+                //exitText.anchor.setTo(0, 0);
+                //exitText.inputEnabled = true;
+                //exitText.events.onInputDown.add(exitGame, this);
             }
 
             function audioCB() {}
@@ -71,13 +88,15 @@ angular.module('bilgic')
 
                     masterCounter++;
                     winAudio.play();
+                    firstSprite.shadow.destroy();
                     firstSprite.destroy();
+                    sprite.shadow.destroy();
                     sprite.destroy();
                     totalSprites -= 2;
                     if (totalSprites == 0) {
                         restartGame();
                     }
-                    successText.setText("Skor: " + masterCounter);
+                    successText.setText("Score: " + masterCounter);
                 }
                 if (!isSecond) {
                     first = sprite.key;
