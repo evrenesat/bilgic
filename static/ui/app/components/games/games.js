@@ -19,9 +19,10 @@ angular.module('bilgic.games', [])
     .controller('GameEditController', function ($scope, $location, $timeout, Editor, Client) {
         Client.getGames().success(function (res) {
             $scope.games = res.games;
-        })
+        });
         $scope.search_images = function () {
-             Editor.search_images($scope.kw)
+            $scope.search_results = 0;
+            Editor.search_images($scope.kw)
                 .success(function (data) {
                     $scope.search_results = data.results;
                 });
@@ -43,7 +44,7 @@ angular.module('bilgic.games', [])
         $scope.set_level = function () {
             Editor.set_level($scope.levelName, $scope.selected_src, $scope.selected_game)
                 .success(function (data) {
-                    $location.path('#/games/'+data.new_level_id);
+                    $location.path('#/games/' + data.new_level_id);
                 });
         };
     });
