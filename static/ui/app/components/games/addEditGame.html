@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="back-button" style="top:40%;"><a href="#/"><span><</span></a></div>
+<div style="margin: 20px; color:#65767F;">
+    <div class="col-sm-4" style="height: 100%;">
+        <form ng-submit="search_images()" style="width: 100%">
+            <input type="text" ng-model="kw">
+            <button type="submit">Find</button>
+        </form>
 
-</body>
-</html>
+        <span>Number of images: {{selected.length}}</span>
+
+        <form ng-submit="set_level()" style="width: 100%" ng-show="selected.length > 2">
+            <input type="text" ng-model="levelName">
+            <select name="games" id="games" ng-model="selected_game">
+                <option ng-repeat="game in games" ng-value="game.key">{{game.name}}</option>
+            </select>
+            <button type="submit">GenerateLevel</button>
+        </form>
+
+    </div>
+    <div class="col-sm-8">
+        <div ng-repeat="result in search_results" style="width: 28%; float: left; margin-right:5%;">
+            <img style="width:100%;"
+                 id="result-img-{{kw}}-{{$index}}"
+                 ng-class="{'selected': isSelected('result-img-{{kw}}-{{$index}}')}"
+                 ng-src="{{result}}" alt=""
+                 ng-click="selectToggle($event)">
+        </div>
+    </div>
+</div>

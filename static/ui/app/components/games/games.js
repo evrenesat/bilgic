@@ -11,8 +11,39 @@ angular.module('bilgic.games', [])
                 .success(function (data) {
                     $scope.gameLevels = data.levels;
                 });
-        }
+        };
+        $scope.removeLevels = function () {
+            delete $scope.gameLevels;
+        };
     })
-    .controller('GameEditController', function ($scope, $location, GameService) {
-        // get or create games
+    .controller('GameEditController', function ($scope, $location, $timeout, Editor, Client) {
+        Client.getGames().success(function (res) {
+            $scope.games = res.games;
+        })
+        $scope.search_images = function () {
+             Editor.search_images($scope.kw)
+                .success(function (data) {
+                    $scope.search_results = data.results;
+                });
+        };
+        $scope.selected = [];
+        $scope.selected_src = {};
+        $scope.selectToggle = function (item) {
+            if ($scope.isSelected(item.currentTarget.id)) {
+                $scope.selected.splice($scope.selected.indexOf(item.currentTarget.id), 1);
+                delete $scope.selected_src[item.currentTarget.id];
+            } else {
+                $scope.selected.push(item.currentTarget.id);
+                $scope.selected_src[item.currentTarget.id] = {content: item.currentTarget.src};
+            }
+        };
+        $scope.isSelected = function (id) {
+            return $scope.selected.indexOf(id) > -1;
+        };
+        $scope.set_level = function () {
+            Editor.set_level($scope.levelName, $scope.selected_src, $scope.selected_game)
+                .success(function (data) {
+                    $location.path('#/games/'+data.new_level_id);
+                });
+        };
     });

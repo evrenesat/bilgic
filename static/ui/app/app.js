@@ -4,11 +4,16 @@
 angular.module('bilgic', [
     'ngRoute',
     'ngAnimate',
+    'bilgic.dash',
     'bilgic.games',
     'bilgic.play'
     //'myApp.version'
 ]).config(['$routeProvider', function ($routeProvider) {
         $routeProvider
+            .when('/', {
+                templateUrl: 'components/dash/dash.html',
+                controller: 'DashController'
+            })
             .when('/games', {
                 templateUrl: 'components/games/games.html',
                 controller: 'GamesController'
@@ -25,7 +30,7 @@ angular.module('bilgic', [
                 templateUrl: 'components/play/play.html',
                 controller: 'PlayController'
             })
-            .otherwise({redirectTo: '/games'});
+            .otherwise({redirectTo: '/'});
     }])
     .config(['$httpProvider', function ($httpProvider) {
         // to send cookies CORS

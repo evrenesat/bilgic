@@ -8,7 +8,7 @@ angular.module('bilgic')
         // load images in preload
         // add expression if content type is image
         angular.forEach(gameContent.elements, function (value, key) {
-            game.load.image(value.key, 'data:image/jpg;base64,'+value.content);
+            game.load.image(value.key, value.content);
         });
     };
     return game;

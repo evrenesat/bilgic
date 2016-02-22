@@ -1,12 +1,10 @@
-<div class="container-fluid">
-    <div style="width:20%; height: 100%; margin: 20px; float: left; border-right: 1px dashed #65767F">
-        <ul>
-            <li ng-repeat="game in games">
-                <a role="button" ng-click="getlevels(game.key)">{{game.name}}</a>
-            </li>
-        </ul>
+<div class="back-button" ng-show="!gameLevels"><a href="#/"><span><</span></a></div>
+<div class="back-button" ng-show="gameLevels"><span ng-click="removeLevels()"><</span></div>
+<div class="dash">
+    <div ng-repeat="game in games" ng-show="!gameLevels">
+        <a role="button" ng-click="getlevels(game.key)">{{game.name}}</a>
     </div>
-    <div ng-show="gameLevels" style="width:20%; height: 100%; margin: 20px; float: left; border-right: 1px dashed #65767F">
+    <div ng-show="gameLevels">
         <ul>
             <li ng-repeat="level in gameLevels">
                 <a ng-href="#/play/{{level.key}}">{{level.name}}</a>

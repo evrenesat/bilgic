@@ -15,6 +15,31 @@ ul {
     list-style-type: none;
 }
 
+form {
+    color: #65767F;
+    font-size: 18px;
+    font-family: Verdana, cursive;
+}
+
+.dash {
+    width: 50%;
+    margin-top: 24%;
+    margin-left: 24%;
+    color: #37453F;
+    font-size: 70px;
+}
+
+.selected {
+    border: 3px solid #80F2C0;
+}
+
+.back-button {
+    color: #37453F;
+    font-size: 80px;
+    position: fixed;
+    left: 40px;
+}
+
 .menu {
     list-style: none;
     border-bottom: 0.1em solid black;
