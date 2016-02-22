@@ -21,12 +21,12 @@ angular.module('bilgic.games', [])
             $scope.games = res.games;
         });
         $scope.page = 2;
-        $scope.nextPage = function(page){
+        $scope.nextPage = function (page) {
             $scope.search_results = 0;
-            Editor.search_images($scope.kw+'/'+page)
+            Editor.search_images($scope.kw + '/' + page)
                 .success(function (data) {
                     $scope.search_results = data.results;
-                    $scope.page +=1;
+                    $scope.page += 1;
                 });
         };
         $scope.search_images = function () {

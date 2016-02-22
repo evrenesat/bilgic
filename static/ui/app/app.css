@@ -148,7 +148,7 @@ form {
 }
 
 .ng-leave {
-    animation: slideOutLeft 0.2s both ease-in;
+    animation: slideOutLeft 0.1s both ease-in;
     z-index: 9999;
 }
 
