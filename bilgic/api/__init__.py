@@ -16,9 +16,9 @@ class app(WSGI):
         self.response.set_header("Access-Control-Allow-Origin", "*")
 
     routes = [
-        ('/search_image/([\w]+)', SearchImages()),  # /keyword
-        ('/search_image/([\w]+)/(\d+)', SearchImages()),  # /keyword/page
-        ('/search_image/([\w]+)/(\d+)/(\d+)', SearchImages()),  # /keyword/page/per_page
+        ('/search_image/([\w\s]+)', SearchImages()),  # /keyword
+        ('/search_image/([\w\s]+)/(\d+)', SearchImages()),  # /keyword/page
+        ('/search_image/([\w\s]+)/(\d+)/(\d+)', SearchImages()),  # /keyword/page/per_page
         ('/get_level/([\w]+)', GetLevel()),  # /level_key
         ('/set_level', SetLevel()),
         ('/game_levels/([\w]+)', ListLevels()),

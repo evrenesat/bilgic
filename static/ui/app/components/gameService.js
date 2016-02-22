@@ -94,7 +94,7 @@ angular.module('bilgic')
                         restartGame();
                     }
                     successText.setText("Score: " + masterCounter);
-                }else {
+                }
                     if (!isSecond) {
                         first = sprite.key;
                         firstSprite = sprite;
@@ -108,8 +108,6 @@ angular.module('bilgic')
                         sprite.alpha = 1;
                     }
                     isSecond = !isSecond;
-                }
-
             }
 
             function render() {}

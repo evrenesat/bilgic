@@ -3,6 +3,7 @@ angular.module('bilgic')
     var utilities = {};
     utilities.calcAnchor = function(anchor, matrix) {
         // matrix need to be like 4x4 or 5x5
+        //matrix =
         var mtrx = ((matrix || Settings.default_matrix).split('x')).map(function (x) {
             return 1.3 * (-(Number(x)) + 1); // need to be index
         });
@@ -28,5 +29,11 @@ angular.module('bilgic')
     utilities.calcImageSize = function(){
         Settings.default_matrix.split('x')
     }
+    utilities.gcd = function(a, b) {
+        if ( ! b) {
+            return a;
+        }
+        return gcd(b, a % b);
+    };
     return utilities;
 });

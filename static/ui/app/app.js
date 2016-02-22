@@ -56,7 +56,8 @@ angular.module('bilgic', [
     }])
     .service('Settings', function () {
         return {
-            'api_url': 'http://192.168.1.5:8080/',
-            'default_matrix': '4x5'
+            //'api_url': 'http://192.168.1.5:8080/',
+            'api_url': 'http://169.45.221.132:8080/',
+            'default_matrix': '5x3'
         }
     });
