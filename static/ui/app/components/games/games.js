@@ -20,13 +20,13 @@ angular.module('bilgic.games', [])
         Client.getGames().success(function (res) {
             $scope.games = res.games;
         });
-        $scope.page = 2;
+        $scope.page = 1;
         $scope.nextPage = function (page) {
             $scope.search_results = 0;
+            $scope.page += 1;
             Editor.search_images($scope.kw + '/' + page)
                 .success(function (data) {
                     $scope.search_results = data.results;
-                    $scope.page += 1;
                 });
         };
         $scope.search_images = function () {

@@ -24,8 +24,8 @@
         </div>
         <div ng-repeat="result in search_results" ng-show="search_results !== 0" style="width: 160px; float: left;">
             <img style="width:150px;height:150px;"
-                 id="result-img-{{kw}}-{{$index}}"
-                 ng-class="{'selected': isSelected('result-img-{{kw}}-{{$index}}')}"
+                 id="result-img-{{kw}}-{{page}}-{{$index}}"
+                 ng-class="{'selected': isSelected('result-img-{{kw}}-{{page}}-{{$index}}')}"
                  ng-src="{{result}}" alt=""
                  ng-click="selectToggle($event)">
         </div>
