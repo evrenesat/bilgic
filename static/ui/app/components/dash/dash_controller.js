@@ -1,4 +1,4 @@
-angular.module('bilgic.dash', [])
-    .controller('DashController', function () {
-
+angular.module('bilgic.dash', ['ngAnimate'])
+    .controller('DashController', function ($animate) {
+        $animate.enabled(false);
     });

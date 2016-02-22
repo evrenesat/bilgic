@@ -28,7 +28,7 @@ form {
 
 .dash {
     width: 60%;
-    margin-top: 24%;
+    margin-top: 20%;
     margin-left: 28%;
     color: #37453F;
     font-size: 60px;
@@ -151,7 +151,6 @@ form {
     animation: slideOutLeft 0.2s both ease-in;
     z-index: 9999;
 }
-
 
 /** loader animation */
 
