@@ -34,8 +34,8 @@ angular.module('bilgic')
                 clickAudio = game.add.audio('click');
                 winAudio = game.add.audio('win');
                 game.sound.setDecodedCallback([clickAudio, winAudio], audioCB, this);
-                var blurX = game.add.filter('BlurX');
-                var blurY = game.add.filter('BlurY');
+                //var blurX = game.add.filter('BlurX');
+                //var blurY = game.add.filter('BlurY');
                 point = new Phaser.Point(30, 30);
 
                 anchor = [0, 0];
@@ -50,7 +50,7 @@ angular.module('bilgic')
                     shadow.width = 100;
                     shadow.height = 100;
 
-                    shadow.filters = [blurX, blurY];
+                    //shadow.filters = [blurX, blurY];
                     img.anchor.setTo(anchor[0], anchor[1]);
                     img.inputEnabled = true;
                     img.events.onInputDown.add(match, this);
@@ -58,8 +58,10 @@ angular.module('bilgic')
                     img.width = 100;
                     img.height = 100;
                     var angle = parseInt((Math.random() < 0.5 ? 1 : -1) * (Math.random() * (5 - 1)));
-                    img.angle = angle;
-                    shadow.angle = angle;
+                    if(typeof window.orientation == 'undefined'){
+                        img.angle = angle;
+                        shadow.angle = angle;
+                    }
                     anchor = Utilities.calcAnchor(anchor);
                 });
                 totalSprites = gameContent.elements.length;
