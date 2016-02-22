@@ -84,6 +84,7 @@ angular.module('bilgic')
 
             function match(sprite, pointer) {
                 clickAudio.play();
+
                 if (first === sprite.key && firstSprite.position != sprite.position) {
 
                     masterCounter++;
@@ -97,12 +98,19 @@ angular.module('bilgic')
                         restartGame();
                     }
                     successText.setText("Score: " + masterCounter);
-                }
-                if (!isSecond) {
-                    first = sprite.key;
-                    firstSprite = sprite;
-                    isSecond = !isSecond;
-                } else {
+                }else {
+                    if (!isSecond) {
+                        first = sprite.key;
+                        firstSprite = sprite;
+                        sprite.alpha = 0.6;
+                        sprite.tint = 0xf0f000;
+                    } else {
+                        first = null;
+                        firstSprite.alpha = 1;
+                        firstSprite.tint = 0xFFFFFF;
+                        sprite.tint = 0xFFFFFF;
+                        sprite.alpha = 1;
+                    }
                     isSecond = !isSecond;
                 }
 
