@@ -44,7 +44,7 @@ angular.module('bilgic')
                     var shadow = game.add.sprite(point.x, point.y, value.key);
                     var img = game.add.sprite(point.x, point.y, value.key);
                     img.shadow = shadow;
-                    shadow.anchor.setTo(anchor[0]-0.1, anchor[1]-0.1);
+                    shadow.anchor.setTo(anchor[0]-0.05, anchor[1]-0.05);
                     shadow.tint = 0x000000;
                     shadow.alpha = 0.3;
                     shadow.width = 100;
@@ -64,8 +64,9 @@ angular.module('bilgic')
                 });
                 totalSprites = gameContent.elements.length;
 
-                successText = game.add.text(game.world.width-180, 15, "Skor: 0", {font: "50px foo", fill: "#FAF490"});
+                successText = game.add.text(game.world.width-220, 15, "Score: 0 ", {font: "50px foo", fill: "#FAF490"});
                 successText.alpha = 0.5;
+                successText.setShadow(5, 5, 'rgba(0,0,0,0.5)', 15);
                 successText.anchor.setTo(0, 0);
                 //exitText = game.add.text(game.world.width-180, game.world.height-100, "Exit", {font: "50px foo", fill: "#FAF490"});
                 //exitText.anchor.setTo(0, 0);
