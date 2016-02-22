@@ -34,6 +34,14 @@ form {
     font-size: 60px;
 }
 
+.dash2 {
+    width: 60%;
+    margin-top: 2%;
+    margin-left: 28%;
+    color: #37453F;
+    font-size: 60px;
+}
+
 .selected {
     border: 3px solid #80F2C0;
 }
@@ -43,6 +51,7 @@ form {
     font-size: 80px;
     position: fixed;
     left: 40px;
+    top: 40%;
 }
 
 .menu {

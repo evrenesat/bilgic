@@ -1,6 +1,6 @@
 <div class="back-button" ng-show="!gameLevels"><a href="#/"><span><</span></a></div>
 <div class="back-button" ng-show="gameLevels"><span ng-click="removeLevels()"><</span></div>
-<div class="dash">
+<div ng-class="{'dash':!gameLevels, 'dash2': gameLevels}">
     <div ng-repeat="game in games" ng-show="!gameLevels">
         <a role="button" ng-click="getlevels(game.key)">{{game.name}}</a>
     </div>

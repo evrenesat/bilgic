@@ -31,7 +31,7 @@ angular.module('bilgic.games', [])
         };
         $scope.search_images = function () {
             $scope.search_results = 0;
-            Editor.search_images($scope.kw)
+            Editor.search_images($scope.kw+'/1')
                 .success(function (data) {
                     $scope.search_results = data.results;
                 });
