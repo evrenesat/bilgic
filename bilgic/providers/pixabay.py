@@ -7,7 +7,7 @@ from bilgic.providers.base import BaseProvider
 
 
 class PixabayProvider(BaseProvider):
-    SEARCH_URL = "https://pixabay.com/api/?key={api_key}&q={query}&per_page={per_page}"
+    SEARCH_URL = "http://pixabay.com/api/?key={api_key}&q={query}&per_page={per_page}"
 
     def set_credentials(self, api_key):
         self.api_key = api_key
