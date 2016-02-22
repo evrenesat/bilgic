@@ -6,7 +6,7 @@
             <button type="submit">Find</button>
         </form>
 
-        <span>Images found: {{selected.length}}</span>
+        <span>Images selected: {{selected.length}}</span>
 
         <form ng-submit="set_level()" style="width: 100%" ng-show="selected.length > 2">
             <input type="text" ng-model="levelName">
@@ -22,12 +22,13 @@
             <div class="sk-child sk-double-bounce1"></div>
             <div class="sk-child sk-double-bounce2"></div>
         </div>
-        <div ng-repeat="result in search_results" ng-show="search_results !== 0" style="width: 28%; float: left; margin-right:5%;">
-            <img style="width:100%;"
+        <div ng-repeat="result in search_results" ng-show="search_results !== 0" style="width: 160px; float: left;">
+            <img style="width:150px;height:150px;"
                  id="result-img-{{kw}}-{{$index}}"
                  ng-class="{'selected': isSelected('result-img-{{kw}}-{{$index}}')}"
                  ng-src="{{result}}" alt=""
                  ng-click="selectToggle($event)">
         </div>
+        <button ng-show="search_results.length" ng-click="nextPage(page)">next 10</button>
     </div>
 </div>
