@@ -28,8 +28,6 @@ angular.module('bilgic')
             }
 
             function create() {
-                //game.stage.backgroundColor = '#26D6D0';
-                //game.stage.bac = '#26D6D0';
                 game.add.tileSprite(0, 0, window.innerWidth, window.innerHeight, 'bg2');
                 clickAudio = game.add.audio('click');
                 winAudio = game.add.audio('win');
@@ -39,7 +37,6 @@ angular.module('bilgic')
                 point = new Phaser.Point(30, 30);
 
                 anchor = [0, 0];
-                gameContent.elements = Utilities.shuffle(gameContent.elements).concat(Utilities.shuffle(gameContent.elements));
                 angular.forEach(gameContent.elements, function (value, key) {
                     var shadow = game.add.sprite(point.x, point.y, value.key);
                     var img = game.add.sprite(point.x, point.y, value.key);
@@ -68,10 +65,6 @@ angular.module('bilgic')
                 successText.alpha = 0.5;
                 successText.setShadow(5, 5, 'rgba(0,0,0,0.5)', 15);
                 successText.anchor.setTo(0, 0);
-                //exitText = game.add.text(game.world.width-180, game.world.height-100, "Exit", {font: "50px foo", fill: "#FAF490"});
-                //exitText.anchor.setTo(0, 0);
-                //exitText.inputEnabled = true;
-                //exitText.events.onInputDown.add(exitGame, this);
             }
 
             function audioCB() {}
@@ -152,7 +145,6 @@ angular.module('bilgic')
             // quit and go to main page
 
             function exitGame() {
-                //document.querySelector('canvas').remove();
                 location.hash = '#/games';
             }
 
